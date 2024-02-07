@@ -137,6 +137,13 @@ public class Utils {
         return stopWords;
     }
 
+    /************************************************************************************************************/
+    /**
+     * Cette methode permet de calculer la similarite de Jaccard entre deux livres.
+     * @param book1 : le premier livre
+     * @param book2 : le deuxieme livre
+     * @return la similarite de Jaccard entre les deux livres en double
+     */
     public static double jaccard_similarity(Book book1, Book book2) {
         Set<String> set1 = new HashSet<>();
         Set<String> set2 = new HashSet<>();

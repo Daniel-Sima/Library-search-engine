@@ -32,6 +32,7 @@ public class BookService {
     /*************************************************************************************************/
     /**
      * Get all the books
+     *
      * @return the books
      */
     public List<BookDTO> getBooks() {
@@ -46,8 +47,9 @@ public class BookService {
     /*************************************************************************************************/
     /**
      * Convert a book to a bookDTO
-     * @param book  the book
-     * @return      the bookDTO
+     *
+     * @param book the book
+     * @return the bookDTO
      */
     private BookDTO convertToDTO(Book book) {
         BookDTO dto = new BookDTO();
@@ -70,8 +72,9 @@ public class BookService {
     /*************************************************************************************************/
     /**
      * Get the book by its id
-     * @param word  the word to search
-     * @return      the book
+     *
+     * @param word the word to search
+     * @return the book
      */
     public List<BookDTO> searchBooks(String word) {
         String decodedWord = URLDecoder.decode(word, StandardCharsets.UTF_8);
@@ -87,15 +90,13 @@ public class BookService {
             }
         }
 
-        HashMap<Book, Double> books = new HashMap<>();
         List<BookData> bookData = new ArrayList<>();
-        if (isRegEx){
+        if (isRegEx) {
             try {
                 List<Book> booksRes = bookRepository.findAll();
                 RegEx regEx = new RegEx(decodedWord);
                 Automata resDFA = regEx.regEx_automate();
                 for (Book book : booksRes) {
-                    System.out.println("book: " + book);
                     for (BookData data : book.getBookData()) {
                         int cptOcc = resDFA.search(data.getWord(), true);
                         if (cptOcc > 0) {
@@ -123,26 +124,27 @@ public class BookService {
             }
         }
 
-        // Classement implicite par nombre d’occurrences du mot-clef dans le document
-        Collections.sort(bookData, Comparator.comparingDouble(BookData::get_tf_idf).reversed());
+        /// Classement implicite par le score TF-IDF dans l'ordre décroissant
+        bookData.sort(Comparator.comparingDouble(BookData::get_tf_idf).reversed());
+        List<Book> books = new ArrayList<>();
         for (BookData data : bookData) {
-            books.put(data.getBook(), data.get_tf_idf());
+            books.add(data.getBook());
         }
         System.out.println("books: " + books);
 
-        return books.entrySet().stream()
-                    .map(entry -> {
-                            BookDTO dto = convertToDTO(entry.getKey());
-            return dto;
-        })
-                    .collect(Collectors.toList());
+        List<BookDTO> sortedBooks = books.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return sortedBooks;
     }
 
     /*************************************************************************************************/
     /**
      * Get the book and its neighbours based on the Jaccard similarity
-     * @param id                the id of the book
-     * @param jaccardDistance   the Jaccard distance
+     *
+     * @param id              the id of the book
+     * @param jaccardDistance the Jaccard distance
      * @return
      */
     public List<BookDTO> getBookAndBookNeighbours(Long id, Double jaccardDistance) {
@@ -164,6 +166,83 @@ public class BookService {
         return books.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    /*************************************************************************************************/
+    /******************************************** TESTS **********************************************/
+    /*************************************************************************************************/
+    public List<BookDTO> searchBooks_nbBooks(String word, int nbBooks) {
+        double startTime = System.currentTimeMillis();
+        String decodedWord = URLDecoder.decode(word, StandardCharsets.UTF_8);
+        System.out.println("decodedWord: " + decodedWord);
+        System.out.println("word: " + word);
+
+        boolean isRegEx = false;
+        for (int i = 0; i < decodedWord.length(); i++) {
+            char c = decodedWord.charAt(i);
+            if (c == '|' || c == '+' || c == '(' || c == ')' || c == '*' || c == '.') {
+                isRegEx = true;
+                break;
+            }
+        }
+
+        HashMap<Book, Double> books = new HashMap<>();
+        List<BookData> bookData = new ArrayList<>();
+        if (isRegEx) {
+            try {
+                List<Book> booksRes = bookRepository.findAll();
+                // Recuperation que des nbBooks premiers livres
+                booksRes = booksRes.subList(0, nbBooks);
+
+                RegEx regEx = new RegEx(decodedWord);
+                Automata resDFA = regEx.regEx_automate();
+                for (Book book : booksRes) {
+                    for (BookData data : book.getBookData()) {
+                        int cptOcc = resDFA.search(data.getWord(), true);
+                        if (cptOcc > 0) {
+                            bookData.add(data);
+                            break;
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            String[] words = word.split(" ");
+            // Application de la recherche que sur les nbBooks premiers livres dans bookDataRepository
+            bookData = bookDataRepository.findByWord_nbBooks(words[0], nbBooks);
+
+            if (words.length > 1) {
+                for (int i = 1; i < words.length; i++) {
+                    List<BookData> bookData2 = bookDataRepository.findByWord(words[i]);
+                    for (BookData data : bookData2) {
+                        if (!bookData.contains(data)) {
+                            bookData.add(data);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Classement implicite par nombre d’occurrences du mot-clef dans le document
+        Collections.sort(bookData, Comparator.comparingDouble(BookData::get_tf_idf).reversed());
+        for (BookData data : bookData) {
+            books.put(data.getBook(), data.get_tf_idf());
+        }
+
+        double endTime = System.currentTimeMillis();
+
+        List<BookDTO> res = books.entrySet().stream()
+                .map(entry -> {
+                    BookDTO dto = convertToDTO(entry.getKey());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        System.out.println("searchBooks_nbBooks: " + (endTime - startTime) + " ms");
+
+        return res;
     }
 }
 /*************************************************************************************************/

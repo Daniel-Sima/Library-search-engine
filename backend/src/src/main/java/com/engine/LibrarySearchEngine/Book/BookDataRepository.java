@@ -20,6 +20,9 @@ public interface BookDataRepository extends JpaRepository<BookData, Long> {
     void updateTFIDFById(@Param("id") Long id, @Param("tfidf") Double tfidf);
 
     List<BookData> findByWord(String word);
+
+    @Query("SELECT bd FROM BookData bd WHERE bd.word = :word AND bd.book.id <= :nbBooks")
+    List<BookData> findByWord_nbBooks(String word, int nbBooks);
 }
 /************************************************************************************************************/
 /************************************************************************************************************/

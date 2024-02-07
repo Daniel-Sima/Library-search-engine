@@ -37,7 +37,7 @@ public class BookConfig {
                 System.out.println("Loading books...");
                 int bookNb = 1;
                 HashMap<String, Integer> motsDansLivres = new HashMap<>();
-                for (int i=1; i<=50; i++) {
+                for (int i=1; i<=25; i++) {
                     // Tant que le livre n'existe pas on incrémente le numéro (ex: book1, book10, ...)
                     while (Files.notExists(Paths.get("src/data/books/book" + bookNb + ".txt"))) {
                         bookNb++;
