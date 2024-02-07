@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+/*************************************************************************************************/
+/************************************** GENERAL **************************************************/
+/*************************************************************************************************/
+
+/** Colors */
+/* Default color */
+#3D59A7
+/* Tints */
+#c5cde5
+
+/* Background */
+#F0F0F0
+
+/* Success */
+#5CB85C
+
+/* Warning */
+#F0AD4E
+
+/* Danger */
+#D9534F
+
+/* Info */
+#00A2E8
+
+
+/* Text */
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+* {
+  padding: 0;
+  margin: 0;
+  /* largeur et hauteur de l'élément incluent le contenu, la bordure et le padding */
+  box-sizing: border-box;
+}
+
+html {
+  /* Percentage of user's browser font-size setting (10px / 16px = 0.625) */
+  font-size: 62.5%;
+  overflow-x: hidden; /* cacher tous les elements qui debordent sur x*/
+  /* scroll-behavior: smooth; fonctionne que sur chrome et firefox (pas sur safari et edge) */
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  line-height: 1;
+  font-weight: 400;
+  color: #555;
+  overflow-x: hidden; /* cacher tous les elements qui debordent sur x*/
+  background-color: #e9ecef;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap");
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/

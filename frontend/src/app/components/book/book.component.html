@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="btn--search--again">
+    <button routerLink="/home" class="button-54" role="button">
+      Search again &olarr;
+    </button>
+  </div>
+
+  <ng-container *ngIf="loaded">
+    <app-bookdetails
+      [book]="books && books[0]"
+      [idConcerned]="books && books[0].id"
+    ></app-bookdetails>
+
+    <hr />
+
+    <div>
+      <h1>Suggested books:</h1>
+      <ng-container *ngIf="neighboors && neighboors.length === 0">
+        <p>No suggested books</p>
+      </ng-container>
+      <ng-container *ngIf="neighboors && neighboors.length > 0">
+        <p>Based on your last read book</p>
+        <div class="suggested--books">
+          <div *ngFor="let neighboor of neighboors">
+            <div class="neighbor">
+              <a
+                routerLink="/book/{{ neighboor.id }}"
+                class="book--click"
+                (click)="onBookClick(neighboor.id)"
+              >
+                <app-bookdetails
+                  [book]="neighboor"
+                  [idConcerned]="-1"
+                ></app-bookdetails>
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!loaded">
+    <div class="loading">
+      <mat-progress-spinner
+        *ngIf="!loaded"
+        [mode]="'indeterminate'"
+      ></mat-progress-spinner>
+      <p>Loading...</p>
+    </div>
+  </ng-container>
+</div>

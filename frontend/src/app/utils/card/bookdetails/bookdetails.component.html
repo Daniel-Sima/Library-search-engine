@@ -1,0 +1,13 @@
+<div class="book-card">
+  <div class="book-image">
+    <img [src]="book && book.imagePath" alt="Book Cover" />
+  </div>
+  <div class="book-details">
+    <h2>{{ book && book.title }}</h2>
+    <p>Author: {{ book && book.author }}</p>
+    <p>Language: {{ book && book.language }}</p>
+    <a *ngIf="idConcerned > 0" href="{{ book && book.textPath }}"
+      >Read here online!</a
+    >
+  </div>
+</div>

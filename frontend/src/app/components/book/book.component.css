@@ -1,0 +1,119 @@
+/*****************************************************************************************/
+/*****************************************************************************************/
+/*****************************************************************************************/
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap");
+
+.container {
+  padding: 3.2rem;
+  margin: 0 auto;
+  color: #333;
+}
+
+.suggested--books {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+  gap: 16px;
+}
+
+.neighbor {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.neighbor:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.book--click {
+  text-decoration: none !important;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #212529;
+}
+
+/*****************************************************************************************/
+/**************************** Search again button ****************************************/
+/*****************************************************************************************/
+
+.button-54 {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
+    5px 5px 0px 0px;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-bottom: 2rem;
+}
+
+.button-54:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+@media (min-width: 768px) {
+  .button-54 {
+    padding: 0.25em 0.75em;
+  }
+}
+
+.btn--search--again {
+  display: flex;
+  justify-content: center;
+}
+
+/*****************************************************************************************/
+/********************************** Responsive *******************************************/
+/*****************************************************************************************/
+
+@media (min-width: 768px) {
+  .suggested--books {
+    grid-template-columns: repeat(4, minmax(10rem, 1fr));
+  }
+}
+
+@media (max-width: 467px) {
+  .suggested--books {
+    .grid-template-columns {
+      grid-template-columns: repeat(1, minmax(5rem, 1fr));
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .neighbor {
+    width: 75%;
+  }
+}
+
+/***********************************************************************************/
+/***********************************************************************************/
+/***********************************************************************************/

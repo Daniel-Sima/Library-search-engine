@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="container--2">
+    <div id="cover">
+      <form method="get" action="">
+        <div class="tb">
+          <div class="td">
+            <input
+              type="text"
+              placeholder="Search some books"
+              required
+              [(ngModel)]="searchText"
+              name="searchText"
+            />
+          </div>
+          <div class="td" id="s-cover">
+            <button type="submit" (click)="getSearch()">
+              <div id="s-circle"></div>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <ng-container
+      *ngIf="searchStatus === 2 && books !== undefined && books.length > 0"
+    >
+      <div *ngFor="let book of books" class="grid-item">
+        <a routerLink="/book/{{ book.id }}" class="book--click">
+          <app-bookdetails [book]="book"></app-bookdetails>
+        </a>
+      </div>
+    </ng-container>
+  </div>
+  <div class="error--container">
+    <ng-container
+      *ngIf="searchStatus === 3 && (books === undefined || books.length === 0)"
+    >
+      <p>No books found</p>
+    </ng-container>
+    <ng-container *ngIf="searchStatus === 1">
+      <div class="loading">
+        <mat-progress-spinner
+          *ngIf="searchStatus === 1"
+          [mode]="'indeterminate'"
+        ></mat-progress-spinner>
+        <p>Loading...</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
